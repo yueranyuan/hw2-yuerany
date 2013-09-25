@@ -7,8 +7,25 @@
     <description>scores the answers using the annotations previous produced according to some scoring algorithm</description>
     <version>1.0</version>
     <vendor>yuerany 11791 project</vendor>
-    <configurationParameters/>
-    <configurationParameterSettings/>
+    <configurationParameters searchStrategy="language_fallback">
+      <configurationParameter>
+        <name>ScoringAlgorithm</name>
+        <description>The scoring algorithm used to score the answers.  Available algorithms:
+NGram fuzzy
+NGram basic</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>ScoringAlgorithm</name>
+        <value>
+          <string>NGram fuzzy</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
     <typeSystemDescription>
       <imports>
         <import name="descriptors.deiis_types"/>

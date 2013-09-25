@@ -24,8 +24,28 @@
     <description>The full analysis pipeline to score each answer for the question and evaluate the results</description>
     <version>1.0</version>
     <vendor>yuerany 11791 project</vendor>
-    <configurationParameters/>
-    <configurationParameterSettings/>
+    <configurationParameters searchStrategy="language_fallback">
+      <configurationParameter>
+        <name>ScoringAlgorithm</name>
+        <description>The scoring algorithm used to score the answers.  Available algorithms:
+NGram fuzzy
+NGram basic</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>ScoreAnnotator/ScoringAlgorithm</parameter>
+        </overrides>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>ScoringAlgorithm</name>
+        <value>
+          <string>NGram fuzzy</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
     <flowConstraints>
       <fixedFlow>
         <node>TestElementAnnotator</node>
@@ -43,6 +63,9 @@
         <outputs>
           <type allAnnotatorFeatures="true">edu.cmu.deiis.types.Token</type>
         <type allAnnotatorFeatures="true">edu.cmu.deiis.types.NGram</type>
+        <type allAnnotatorFeatures="true">edu.cmu.deiis.types.Question</type>
+          <type allAnnotatorFeatures="true">edu.cmu.deiis.types.AnswerScore</type>
+          <type allAnnotatorFeatures="true">edu.cmu.deiis.types.Answer</type>
         </outputs>
         <languagesSupported/>
       </capability>

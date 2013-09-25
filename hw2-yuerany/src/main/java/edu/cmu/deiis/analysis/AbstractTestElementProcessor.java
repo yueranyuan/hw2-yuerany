@@ -2,6 +2,7 @@ package edu.cmu.deiis.analysis;
 
 import java.util.Iterator;
 
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.FSIndex;
 import org.apache.uima.jcas.JCas;
 
@@ -39,10 +40,11 @@ public abstract class AbstractTestElementProcessor {
    * Read the question and answer annotations from the CAS and call processor methods to perform
    * desired processing
    * @param aJCas         UIMA Cas to read annotations from and write annotations to
+   * @throws AnalysisEngineProcessException 
    */
   @SuppressWarnings("unchecked")
   // we are feeding in the proper type so casting should not be an issue
-  public void process(JCas aJCas) {
+  public void process(JCas aJCas) throws AnalysisEngineProcessException {
 
     // process question
     Iterator<Question> questionIter = (Iterator<Question>) getAnnotationsFromIndex(aJCas,
@@ -52,7 +54,7 @@ public abstract class AbstractTestElementProcessor {
       Question question = questionIter.next();
       processQuestion(question, aJCas);
     } else {
-      // TODO: output error, no question
+      throw new AnalysisEngineProcessException();
     }
 
     // process answers

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 
 import edu.cmu.deiis.types.Question;
@@ -49,11 +50,12 @@ public class TestElementEvaluationProcessor extends AbstractTestElementProcessor
    * + 0.2 "John totally loves Mary"
    * Precision: 0.5
    * @param aJCas         UIMA Cas that the question, answers, and scores are read from
+   * @throws AnalysisEngineProcessException 
    */
   @SuppressWarnings("unchecked")
   //we are feeding in the proper type so casting should not be an issue
   @Override
-  public void process(JCas aJCas) {
+  public void process(JCas aJCas) throws AnalysisEngineProcessException {
     
     // STEP 1: sort the answers by score
     Iterator<AnswerScore> answerScoreIter = 
@@ -77,9 +79,9 @@ public class TestElementEvaluationProcessor extends AbstractTestElementProcessor
     // there should only be one question
     if (questionIter.hasNext()) {
       Question question = (Question)questionIter.next();
-      System.out.println("Question: " + question.getCoveredText());
+      System.out.println(String.format("Question: %s", question.getCoveredText()));
     } else {
-      // TODO: output error, no question
+      throw new AnalysisEngineProcessException();
     }
     // STEP 2.2:  print the answers.  Count the correct ones while we're at it.
     int len = answerScoreList.size();
@@ -91,9 +93,14 @@ public class TestElementEvaluationProcessor extends AbstractTestElementProcessor
         correct = true;
         N ++;
       }
-      String correctMarker = correct ? "+" : "-";
-      System.out.println(correctMarker + " " + Double.toString(answerScore.getScore()) +
-              " " + answerScore.getCoveredText());
+      System.out.println(String.format("%s %1.2f %s",
+              correct ? "+" : "-",
+              answerScore.getScore(),
+              answerScore.getCoveredText()));
+    }
+    // no answers to evaluate
+    if (N == 0) {
+      throw new AnalysisEngineProcessException();
     }
     
     // STEP 3: compute and print precision
@@ -104,6 +111,6 @@ public class TestElementEvaluationProcessor extends AbstractTestElementProcessor
         correctAtN ++;
       }
     }
-    System.out.println("Precision at " + N + ": " + ((double)correctAtN/N)); // TODO: what if N was 0, throw exception
+    System.out.println(String.format("Precision at %d: %1.2f", N, ((double)correctAtN/N)));
   }
 }

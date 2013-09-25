@@ -42,7 +42,7 @@ public class TestElementTokenizeProcessor extends AbstractTestElementProcessor {
    * @param aJCas               UIMA Cas system used in the pipeline
    */
   private void annotateWithTokens(Annotation textAnnotation, JCas aJCas) {
-    TokenizerFactory<Word> factory = PTBTokenizerFactory.newTokenizerFactory(); // TODO: initialize
+    TokenizerFactory<Word> factory = PTBTokenizerFactory.newTokenizerFactory();
     Tokenizer<Word> tokenizer = factory.getTokenizer(new StringReader(textAnnotation.getCoveredText()));
     List<Word> tokens = tokenizer.tokenize();
     Iterator<Word> tokIter = tokens.iterator();

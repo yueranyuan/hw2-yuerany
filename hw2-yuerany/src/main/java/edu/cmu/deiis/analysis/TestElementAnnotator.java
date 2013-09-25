@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 
 /**
@@ -44,8 +45,9 @@ public class TestElementAnnotator extends JCasAnnotator_ImplBase {
    * where [correctness] is 1 if correct and 2 if incorrect
    * 
    * Only 1 question is handled.  Any number of answers is okay.
+   * @throws AnalysisEngineProcessException 
    */
-  public void process(JCas aJCas) {
+  public void process(JCas aJCas) throws AnalysisEngineProcessException {
     // get document text
     String docText = aJCas.getDocumentText();
     Matcher matcher = mQuestionPattern.matcher(docText);
@@ -53,7 +55,7 @@ public class TestElementAnnotator extends JCasAnnotator_ImplBase {
     if (matcher.find(0)) {
       questionAnnotationFactory.Annotate(aJCas, matcher.start(1), matcher.end(1));
     } else {
-      // TODO: error question not found
+      throw new AnalysisEngineProcessException();
     }
     // get answers
     matcher = mAnswerPattern.matcher(docText);
